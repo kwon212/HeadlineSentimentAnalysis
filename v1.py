@@ -1,3 +1,5 @@
+# this file gets keywords from url and finds relevant tweets based on input -- does kcluster to grab more relevant tweets
+
 import requests
 import newspaper
 import nltk
@@ -79,6 +81,7 @@ if __name__ == '__main__':
 	api = tweepy.API(auth)
 '''
 	url = raw_input("enter URL:")
+	dataset = raw_input("enter dataset:")
 	article = Article(url)
 	article.download()
 	article.parse()
@@ -104,9 +107,12 @@ if __name__ == '__main__':
 	title_keys = rake_object_title.run(article.title)
 	#print("Keywords on html:", keywords_html)
 	keywords_summary = rake_object_summary.run(article.summary)
-	for i in range(5):
+	count = 0
+	for i in range(len(keywords_html)):
 		keywords.append(keywords_html[i][0])
-		
+		count = count + 1
+		if count > 4:
+			break
 	for i in range(len(title_keys)):
 		keywords.append(title_keys[i][0])
 		
@@ -119,7 +125,7 @@ if __name__ == '__main__':
 	#print keywords
 
 
-	t = TweetsClustering(50)
+	t = TweetsClustering(50, dataset)
 	t.preprocessTweet()
 	#t.getJaccard()
 	#t.determineCentroids()
@@ -135,13 +141,13 @@ if __name__ == '__main__':
 				count = count + 1
 				#print(i['text'])
 				#list_of_ids.append(i['id'])		
-		if count > 1:
+		if count >= 4:
 			#print(i['text'])
 			list_of_ids.append(i['id'])
 	#print (list_of_ids)
 	
 	print (len(list_of_ids))
-	
+	t.setClusterNum(len(list_of_ids))	
 	t.getJaccard()
 	t.determineCentroids()
 	t.initializeClusters()
@@ -166,4 +172,12 @@ if __name__ == '__main__':
 	print(list_of_centroids)
 	list_of_centroid = set(list_of_centroids)
 	print(list_of_centroid)
-	print (len(list_of_centroids))
+	print (len(list_of_centroid))
+	list_of_tweets = []
+	for c in list_of_centroid:		
+		for ci in t.clusters[c]:
+			#print(ci)
+			list_of_tweets.append(t.parsedTweets[ci]['text'])
+
+	#print(list_of_tweets)
+	print(len(list_of_tweets))

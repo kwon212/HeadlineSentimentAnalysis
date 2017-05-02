@@ -7,8 +7,9 @@ from numpy.random import choice
 from collections import defaultdict
 class TweetsClustering:
     
-    def __init__(self, k):
+    def __init__(self, k, d):
         self.k = k
+	self.dataset = d
 	self.parsedTweets = []
         self.tweets = {}
         self.jaccard = defaultdict(dict)
@@ -24,8 +25,8 @@ class TweetsClustering:
     def setClusterNum(self,k):
 	self.k = k
     def preprocessTweet(self):
-        count = 1
-        with open("sentiment_tweets.txt") as f:
+        count = 0
+        with open(self.dataset) as f:
             for tweet in f:
                 parsed_tweet = {}
 
@@ -46,7 +47,7 @@ class TweetsClustering:
                 	#print("count: ", count, " tweet: ", tweet[1::])
 			count = count + 1
 		
-                if count > 5000:
+                if count >= 5000:
                     return
 
     def clean_tweet(self, tweet):
@@ -109,7 +110,7 @@ class TweetsClustering:
                 converge = True
                 #print("iteration " + str(it))
                 test = 0
-                for c in self.centroids:
+                '''for c in self.centroids:
                     
                     print (str(self.centroids[c])+":"),
                     #print ("data: " )
@@ -118,7 +119,7 @@ class TweetsClustering:
                         print (ci),
                         #test+=1
                     print("\n")
-                    #print (test)
+                    #print (test)'''
             self.getCentroids()
             self.clustersprev = self.clusters
         #print (self.centroids)
