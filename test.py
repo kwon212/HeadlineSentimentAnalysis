@@ -25,7 +25,7 @@ class TweetsClustering:
 	self.k = k
     def preprocessTweet(self):
         count = 1
-        with open("sentiment_tweets.txt") as f:
+        with open("sentimenttweets_random.txt") as f:
             for tweet in f:
                 parsed_tweet = {}
 
