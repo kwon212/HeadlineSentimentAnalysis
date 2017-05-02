@@ -77,7 +77,7 @@ class TwitterClient(object):
         try:
             # call twitter api to fetch tweets
             #fetched_tweets = self.api.search(q = query, count = count)
-            f = open("src/sentimenttweets_random.txt",'r') 
+            f = open("src/sentimenttweets.txt",'r') 
             # parsing tweets one by one
             for tweet in f:
      
@@ -109,13 +109,12 @@ class TwitterClient(object):
         '''
         # empty list to store parsed tweets
         tweets = []
-        
+ 
         try:
             # call twitter api to fetch tweets
-            f = open("src/sentimenttweets_random.txt",'r') 
-            f = list(f)
+            f = open("src/sentimenttweets.txt",'r') 
             # parsing tweets one by one
-            for tweet in f[:2000] :
+            for tweet in f:
                 tweet = tweet.replace(','," ",1)
 
                 tweet = self.clean_tweet(tweet)
@@ -250,10 +249,9 @@ def main():
 
     """
     testing Textblob accuracy (has nothing to do with SVM)
-    
-    tweets = api.get_tweets(query = 'Trump', count = 10)
-    #print tweets
-iINES TERMINATED BY '\n';
+    """
+    tweets = api.get_tweets(query = 'Trump', count = 400)
+    print tweets
     # picking positive tweets from tweets
     count = 0
     for tweet in tweets:
@@ -280,19 +278,16 @@ iINES TERMINATED BY '\n';
     # for tweet in ntweets[:10]:
     #    print(tweet['text'])
 
-    """
+
     """
     Training, testing SVM
     """
-    tweets = api.get_justtweets(query = 'Trump', count = 10)
-    print (len(tweets))
+    tweets = api.get_justtweets(query = 'Trump', count = 9000)
+
     #split dataset into 60/40 train, test split
-    start = int(len(tweets)*0.60)
-    train_tweets = tweets[0:start]
-    
-    test_tweets = tweets[start:]
-    print test_tweets
-    print len(train_tweets), len(test_tweets)
+    tweets = tweets[0:int(len(tweets)*0.6)]
+    test_tweets=tweets[int(len(tweets)*0.6)::]
+    print len(tweets), len(test_tweets)
     fv = []
 
     #Train the classifier: expand feature vector from training set
@@ -301,42 +296,20 @@ iINES TERMINATED BY '\n';
         featureVector = api.getFeatureVector(t)
         fv.extend([f for f in featureVector if f not in fv])
     
-    result = api.getSVMFeatureVL(train_tweets, fv)
-    print result['labels']
+    result = api.getSVMFeatureVL(tweets, fv)
+    #print result['labels']
     problem = svm_problem(result['labels'], result['feature_vector'])
 
     param = svm_parameter('-q')
     param.kernel_type = LINEAR
-    param.probability = 1
     classifier = svm_train(problem, param)
     svm_save_model('classifierDumpFile', classifier)
 
 
     #Test the classifier with the test set
     test_feature_vector = api.getSVMFeatureVL(test_tweets, fv)
-    p_labels, p_accs, p_vals = svm_predict(test_feature_vector['labels'],test_feature_vector['feature_vector'], classifier, "-b 1")
-    #print p_labels
-    #print p_accs
-    #print p_vals
-    for p in range(len(p_vals)):
-        #get probability of belonging in that class
-        
-        pval = p_vals[p][int(p_labels[p])]
-        print pval
-        if int(pval) == int(0):
-            sent = "positive"
-        if int(pval) == int(1):
-            sent = "negative"
-        if int(pval) == int(2):
-            sent = "neutral"
+    p_labels, p_accs, p_vals = svm_predict(test_feature_vector['labels'],test_feature_vector['feature_vector'], classifier)
 
-        if pval > (float(0.75)):
-            print "strongly",sent
-        if pval >= (0.25) and pval <= (0.75):
-            print sent
-        else:
-           print "mildly", sent
- 
 
 if __name__ == "__main__":
     # calling main function
