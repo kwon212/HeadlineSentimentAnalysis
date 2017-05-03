@@ -157,7 +157,7 @@ if __name__ == '__main__':
         keywords[i] = re.sub('[^A-Za-z0-9\s]+', '', keywords[i])
     if "reading" in keywords:
         keywords.remove("reading")
-    print(keywords)
+    #print(keywords)
     
 
     CONSUMER_KEY = "5k315aJtfEpZOftsOpOIPrvai"
