@@ -9,8 +9,8 @@ class TweetsClustering:
     
     def __init__(self, k, d):
         self.k = k
-	self.dataset = d
-	self.parsedTweets = []
+        self.dataset = d
+        self.parsedTweets = []
         self.tweets = {}
         self.jaccard = defaultdict(dict)
         self.seeds = list()
@@ -23,7 +23,7 @@ class TweetsClustering:
 
         t.close()
     def setClusterNum(self,k):
-	self.k = k
+        self.k = k
     def preprocessTweet(self):
         count = 0
         with open(self.dataset) as f:
@@ -33,20 +33,21 @@ class TweetsClustering:
                 tweet = tweet.replace(','," ",1)
                 tweet = self.clean_tweet(tweet)
                 tweet = tweet.split()
-		
+        
                 #tweettxt = ' '.join(tweet[1::]).strip().decode(('utf-8'))
                 if (len(tweet[1::])) > 0:
-			#self.parsedTweets.append(tweet[1::])
-			parsed_tweet['text'] = ' '.join(tweet[1::])
-                	# saving sentiment of tweet
-                	parsed_tweet['sentiment'] = tweet[0]
-                	parsed_tweet['id'] = count
-			self.parsedTweets.append(parsed_tweet) 
-		
-                	self.tweets[count] = tweet[1::]
-                	#print("count: ", count, " tweet: ", tweet[1::])
-			count = count + 1
-		
+            #self.parsedTweets.append(tweet[1::])
+                    parsed_tweet['text'] = ' '.join(tweet[1::])
+                    parsed_tweet['entiretext'] = ' '.join(tweet[0:])
+                            # saving sentiment of tweet
+                    parsed_tweet['sentiment'] = tweet[0]
+                    parsed_tweet['id'] = count
+                    self.parsedTweets.append(parsed_tweet) 
+        
+                    self.tweets[count] = tweet[1::]
+                    #print("count: ", count, " tweet: ", tweet[1::])
+                    count = count + 1
+        
                 if count >= 5000:
                     return
 
