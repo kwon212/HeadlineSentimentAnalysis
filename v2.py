@@ -80,13 +80,8 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-
-    #url = "https://www.nytimes.com/2017/05/02/world/europe/trump-putin-syria.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news"
-    #url = "https://www.nytimes.com/2017/03/04/world/asia/north-korea-missile-program-sabotage.html?ref=politics"
-
+    url = raw_input("enter")
     #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
-    #url = "https://www.nytimes.com/2017/05/02/us/politics/health-care-paul-ryan-fred-upton-congress.html"
-    url = raw_input("enter url: ")
     article = Article(url)
     article.download()
     article.parse()
@@ -160,12 +155,9 @@ if __name__ == '__main__':
       
         #keywords[i] = keywords[i].encode("utf-8")
         keywords[i] = re.sub('[^A-Za-z0-9\s]+', '', keywords[i])
-
-
     if "reading" in keywords:
         keywords.remove("reading")
     print(keywords)
-
     
 
     CONSUMER_KEY = "5k315aJtfEpZOftsOpOIPrvai"
@@ -200,11 +192,13 @@ count = 0
 with open('tweets.txt') as f:
     for line in f:
         if line.strip() == "##########":
+            #print "ss"
             for key in keywords:
                 if(key in t.split()):
                     count = count + 1
             if count >= 4:
                     tw.append(t)
+                    #print t
                     t = ""
                     count = 0
             t = ""
@@ -213,5 +207,7 @@ with open('tweets.txt') as f:
     #tw = f.readlines()
 
 tw = [x.strip() for x in tw]
-
+#for t in tw:
+#    print t
+#    print "\n"
 sentiment.main(tw)
