@@ -85,7 +85,8 @@ if __name__ == '__main__':
     #url = "https://www.nytimes.com/2017/03/04/world/asia/north-korea-missile-program-sabotage.html?ref=politics"
 
     #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
-    url = "https://www.nytimes.com/2017/05/02/us/politics/health-care-paul-ryan-fred-upton-congress.html"
+    #url = "https://www.nytimes.com/2017/05/02/us/politics/health-care-paul-ryan-fred-upton-congress.html"
+    url = raw_input("enter url: ")
     article = Article(url)
     article.download()
     article.parse()
