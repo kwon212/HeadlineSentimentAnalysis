@@ -217,6 +217,49 @@ class TwitterClient(object):
             for w in sortedFeatures:
                 map[w] = 0
 
+            tweet_words = t[0]
+            tweet_opinion = t[1]
+            #Fill the map
+            t = t.split(" ")
+            tweet_opinion = t[0]
+            #print tweet_opinion
+            for word in t[1:]:
+                #process the word (remove repetitions and punctuations)
+                word = self.replaceTwoOrMore(word)
+                word = word.strip('\'"?,.')
+                #set map[word] to 1 if word exists
+                if word in map:
+                    map[word] = 1
+            #end for loop
+            values = map.values()
+            feature_vector.append(values)
+            if(tweet_opinion == 'positive'):
+                label = 0
+            elif(tweet_opinion == 'negative'):
+                label = 1
+            elif(tweet_opinion == 'neutral'):
+                label = 2
+            labels.append(label)
+        #return the list of feature_vector and labels
+        return {'feature_vector' : feature_vector, 'labels': labels}
+    def getSVMFeatureVLT(self, tweets, featureList):
+        """
+        This is where we check the feature vector against the tweet.
+        Based on the tweet's classification(which is available from the dataset we have),
+        we label the features with either a 0,1,2.
+        """
+
+        sortedFeatures = sorted(featureList)
+        map = {}
+        feature_vector = []
+        labels = []
+        for t in tweets:
+            label = 0
+            map = {}
+            #Initialize empty map
+            for w in sortedFeatures:
+                map[w] = 0
+
             #tweet_words = t[0]
             #tweet_opinion = t[1]
             #Fill the map
@@ -233,15 +276,15 @@ class TwitterClient(object):
             #end for loop
             values = map.values()
             feature_vector.append(values)
-            #if(tweet_opinion == 'positive'):
-            #    label = 0
+            #af(tweet_opinion == 'positive'):
+            ##    label = 0
             #elif(tweet_opinion == 'negative'):
-            #    label = 1
+            ##    label = 1
             #elif(tweet_opinion == 'neutral'):
             #    label = 2
-            labels.append(0)
+            labels.append(-1)
         #return the list of feature_vector and labels
-        return {'feature_vector' : feature_vector, 'labels': labels}
+        return {'feature_vector' : feature_vector, 'labels': labels}    
 #end
 
 #Train the classifier
@@ -301,6 +344,7 @@ iINES TERMINATED BY '\n';
         
         featureVector = api.getFeatureVector(t)
         fv.extend([f for f in featureVector if f not in fv])
+     
     """      
     result = api.getSVMFeatureVL(train_tweets, fv)
     print result['labels']
@@ -317,7 +361,7 @@ iINES TERMINATED BY '\n';
     """
     classifier = svm_load_model('classifierDumpFile')
     #Test the classifier with the test set
-    test_feature_vector = api.getSVMFeatureVL(test_tweets, fv)
+    test_feature_vector = api.getSVMFeatureVLT(test_tweets, fv)
     p_labels, p_accs, p_vals = svm_predict(test_feature_vector['labels'],test_feature_vector['feature_vector'], classifier, "-b 1")
     #print p_labels
     #print p_accs
@@ -346,12 +390,12 @@ iINES TERMINATED BY '\n';
     f = open("headlinesentiment.txt","a")
     if sumavg > (float(0.75)):
         print "strongly",sent
-        f.write("strongly"+sent)
+        f.write("strongly "+sent)
     elif sumavg >= (0.25) and sumavg <= (0.75):
         f.write(sent)
         print sent
     else:
-        f.write("midly"+sent)
+        f.write("midly "+sent)
         print "mildly", sent
     f.write("\n")
     f.close()

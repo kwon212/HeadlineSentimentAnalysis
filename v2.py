@@ -7,6 +7,7 @@ import operator
 import tweepy
 import json
 import re
+from collections import Counter
 from nltk.tokenize import word_tokenize
 from newspaper import Article
 from tweepy.streaming import StreamListener
@@ -17,7 +18,9 @@ import sentimentmodifiedcurrent as sentiment
 
 punctuation = list(string.punctuation)
 stop = stopwords.words('english') + punctuation + ['rt', 'via']
-
+stop.append("Advertisement")
+stop.append("Continue")
+stop.append("with")
 emoticons_str = r"""
     (?:
         [:=;] # Eyes
@@ -54,7 +57,7 @@ class MyStreamListener(StreamListener):
     def __init__(self, api = None):
         super(MyStreamListener, self).__init__()
         self.counter = 0
-        self.limit = 350
+        self.limit = 1000
         self.tweetList = []
             
     def on_status(self, status):
@@ -77,8 +80,12 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     #url = "https://www.nytimes.com/2017/05/02/world/europe/trump-putin-syria.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news"
     #url = "https://www.nytimes.com/2017/03/04/world/asia/north-korea-missile-program-sabotage.html?ref=politics"
+=======
+    url = raw_input("enter")
+>>>>>>> 1fe5dd4f3a5d92b26f2d822a67c747997a95a129
     #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
     url = "https://www.nytimes.com/2017/05/02/us/politics/health-care-paul-ryan-fred-upton-congress.html"
     article = Article(url)
@@ -89,15 +96,43 @@ if __name__ == '__main__':
     html = article.html
     text_maker = html2text.HTML2Text()
     text_maker.ignore_links = True
+    l = list(article.title.encode("utf-8").split())
     text = text_maker.handle(html)
-
-    print(article.title)
-    
+    l = [li for li in l if li.lower() not in stop]
+    #c=Counter(l)
+    #c = c.most_common(2)
+    #print c
+    #print(article.title)
+    #k#eywords = l 
+    f = open("headlinesentiment.txt","r")
+    c = 0
+    maxjc = 2
+    healinel = -1
+    ps = f.readlines()
+    ps = [x.strip() for x in ps]
+    for line in ps:
+        if c % 3 == 0:
+           
+           
+             s1 = set(line.split())
+             #print s1
+             s2 = set(article.title.encode("utf-8").split())
+             jc = (1 - float(len(s1.intersection(s2))) / float(len(s1.union(s2))))
+             #print jc
+             if jc < maxjc:
+                maxjc = jc
+                headlinel = c  
+        c += 1
+    #print headlinel
+    ps = ps[headlinel+2].strip()    
     f = open("headlinesentiment.txt","a")
     f.write(article.title.encode("utf-8"))
     f.write("\n")
+    f.write(ps)
+    f.write("\n")
     f.close()
 
+        
     keywords = article.keywords
 
 
@@ -108,23 +143,31 @@ if __name__ == '__main__':
     keywords_html = rake_object_html.run(text)
     keywords_summary = rake_object_summary.run(article.summary)
     
+    #print keyword
     count = 0
-    for i in range(len(keywords_html)):
-        keywords.append(keywords_html[i][0])
-        count = count + 1
-        if count > 4:
-            break
-
-    for i in range(len(title_keys)):
-        keywords.append(title_keys[i][0])
-
-    for i in range(len(keywords_summary)):
-        keywords.append(keywords_summary[i][0])
-
-    for i in range(len(keywords)):
-        keywords[i] = keywords[i].encode("utf-8")
+    #for i in range(len(keywords_html)):
+    #    keywords.append(keywords_html[i][0])
+    #    count = count + 1
+    #    if count > 4:
+    #        break
+    
+    #for i in range(len(title_keys)):
+    #    keywords.append(title_keys[i][0])
+    
+    #for i in range(len(keywords_summary)):
+     #   keywords.append(keywords_summary[i][0])
+    keywords = l 
+    for i in range(len(keywords)):  
+      
+        #keywords[i] = keywords[i].encode("utf-8")
         keywords[i] = re.sub('[^A-Za-z0-9\s]+', '', keywords[i])
+<<<<<<< HEAD
 
+=======
+    if "reading" in keywords:
+        keywords.remove("reading")
+    print(keywords)
+>>>>>>> 1fe5dd4f3a5d92b26f2d822a67c747997a95a129
     
 
     CONSUMER_KEY = "5k315aJtfEpZOftsOpOIPrvai"
@@ -159,17 +202,32 @@ count = 0
 with open('tweets.txt') as f:
     for line in f:
         if line.strip() == "##########":
+<<<<<<< HEAD
             
+=======
+            #print "ss"
+>>>>>>> 1fe5dd4f3a5d92b26f2d822a67c747997a95a129
             for key in keywords:
-                if(key in t):
+                if(key in t.split()):
                     count = count + 1
             if count >= 4:
                     tw.append(t)
+<<<<<<< HEAD
+=======
+                    #print t
+>>>>>>> 1fe5dd4f3a5d92b26f2d822a67c747997a95a129
                     t = ""
                     count = 0
+            t = ""
         else:
             t = t + line
     #tw = f.readlines()
 
 tw = [x.strip() for x in tw]
+<<<<<<< HEAD
+=======
+for t in tw:
+    print t
+    print "\n"
+>>>>>>> 1fe5dd4f3a5d92b26f2d822a67c747997a95a129
 sentiment.main(tw)
