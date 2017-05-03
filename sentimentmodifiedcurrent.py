@@ -343,18 +343,18 @@ iINES TERMINATED BY '\n';
     if int(pval) == int(2):
         sent = "neutral"
 
-    f = open("headlinesentiment.txt","w")
+    f = open("headlinesentiment.txt","a")
     if sumavg > (float(0.75)):
         print "strongly",sent
-        f.write("strongly",sent)
+        f.write("strongly"+sent)
     elif sumavg >= (0.25) and sumavg <= (0.75):
         f.write(sent)
         print sent
     else:
-        f.write("midly",sent)
+        f.write("midly"+sent)
         print "mildly", sent
- 
-    
+    f.write("\n")
+    f.close()
 
 if __name__ == "__main__":
     # calling main function

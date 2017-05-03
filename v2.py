@@ -54,7 +54,7 @@ class MyStreamListener(StreamListener):
     def __init__(self, api = None):
         super(MyStreamListener, self).__init__()
         self.counter = 0
-        self.limit = 1000
+        self.limit = 350
         self.tweetList = []
             
     def on_status(self, status):
@@ -63,9 +63,10 @@ class MyStreamListener(StreamListener):
             self.counter = self.counter + 1
             try:
                 with open('tweets.txt', 'a') as f:
-                    f.write(str(self.counter))
+                    #f.write(str(self.counter))
                     f.write((status.text).encode("utf-8"))
                     f.write("\n")
+                    f.write("##########")
                     f.write("\n")
                 f.close()
             except (TypeError, NameError):
@@ -76,7 +77,9 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-    url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
+    url = "https://www.nytimes.com/2017/05/02/world/europe/trump-putin-syria.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news"
+    #url = "https://www.nytimes.com/2017/03/04/world/asia/north-korea-missile-program-sabotage.html?ref=politics"
+    #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
     article = Article(url)
     article.download()
     article.parse()
@@ -88,9 +91,12 @@ if __name__ == '__main__':
     text = text_maker.handle(html)
 
     print(article.title)
-    f = open("headlinesentiment.txt","w")
-    f.write(article.title)
-    f.close
+    
+    f = open("headlinesentiment.txt","a")
+    f.write(article.title.encode("utf-8"))
+    f.write("\n")
+    f.close()
+
     keywords = article.keywords
 
 
@@ -152,14 +158,16 @@ t = ""
 count = 0
 with open('tweets.txt') as f:
     for line in f:
-        if line == "\n":
-	    for key in keywords:
-	        if(key in t):
-		    count = count + 1
-	    if count >= 4:
-            	tw.append(t)
-            	print t
-            t = ""
+        if line.strip() == "##########":
+            print "ss"
+            for key in keywords:
+                if(key in t):
+                    count = count + 1
+            if count >= 4:
+                    tw.append(t)
+                    print t
+                    t = ""
+                    count = 0
         else:
             t = t + line
     #tw = f.readlines()
