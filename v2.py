@@ -14,7 +14,7 @@ from nltk.corpus import stopwords
 import string
 import sentimentmodifiedcurrent as sentiment
 
-count = 1 
+
 punctuation = list(string.punctuation)
 stop = stopwords.words('english') + punctuation + ['rt', 'via']
 
@@ -145,11 +145,17 @@ if __name__ == '__main__':
     print(terms_stop)'''
 tw = []
 t = ""
+
+count = 0
 with open('tweets.txt') as f:
     for line in f:
         if line == "\n":
-            tw.append(t)
-            print t
+	    for key in keywords:
+	        if(key in t):
+		    count = count + 1
+	    if count >= 4:
+            	tw.append(t)
+            	print t
             t = ""
         else:
             t = t + line
