@@ -50,13 +50,19 @@ def preprocess(s, lowercase=False):
     return tokens
 
 class MyStreamListener(StreamListener):
-	def __init__(self):
+	def __init__(self, api = None):
+		super(MyStreamListener, self).__init__()
 		self.counter = 0
-		self.limit = 10	
-	
+		self.limit = 10
+			
+	#
 	def on_status(self, status):
-		print(status.text)
-
+		if self.counter < self.limit:
+			print(self.counter)
+			print(status.text)
+			self.counter = self.counter + 1
+		else: 
+			myStream.disconnect()
 	def on_error(self, status):
 		print(status)
 
@@ -115,10 +121,12 @@ if __name__ == '__main__':
 	myStreamListener = MyStreamListener()
 	myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
 
-	myStreamListener = MyStreamListener()
-	myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-
 	myStream.filter(track=keywords)
+
+	#keystostring = " ".join(keywords)
+	#keystostring = '"' + re.sub('\s', '","', keystostring) + '"'
+	#print(keystostring)
+	#myStream.filter(track=["apple"])
 
 	'''with open('tweets.json', 'r') as f:
 		for line in f:
