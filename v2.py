@@ -54,13 +54,19 @@ class MyStreamListener(StreamListener):
 		super(MyStreamListener, self).__init__()
 		self.counter = 0
 		self.limit = 10
+		self.tweetList = []
 			
-	#
 	def on_status(self, status):
 		if self.counter < self.limit:
-			print(self.counter)
-			print(status.text)
+			print(self.counter)	
 			self.counter = self.counter + 1
+			try:
+				with open('tweets.txt', 'a') as f:
+					f.write((status.text).encode("utf-8"))
+					f.write("\n")
+				f.close()
+			except (TypeError, NameError):
+				print(TypeError + " " + NameError)	
 		else: 
 			myStream.disconnect()
 	def on_error(self, status):
