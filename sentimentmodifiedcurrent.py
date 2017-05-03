@@ -362,7 +362,7 @@ iINES TERMINATED BY '\n';
     classifier = svm_load_model('classifierDumpFile')
     #Test the classifier with the test set
     test_feature_vector = api.getSVMFeatureVLT(test_tweets, fv)
-    p_labels, p_accs, p_vals = svm_predict(test_feature_vector['labels'],test_feature_vector['feature_vector'], classifier, "-b 1")
+    p_labels, p_accs, p_vals = svm_predict(test_feature_vector['labels'],test_feature_vector['feature_vector'], classifier, "-q -b 1")
     #print p_labels
     #print p_accs
     #print p_vals
@@ -386,7 +386,8 @@ iINES TERMINATED BY '\n';
         sent = "negative"
     if int(pval) == int(2):
         sent = "neutral"
-
+    print("Your sentiments are being generated...")
+    print ("Your tweet based sentiment is: "),
     f = open("headlinesentiment.txt","a")
     if sumavg > (float(0.75)):
         print "strongly",sent

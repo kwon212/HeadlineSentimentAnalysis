@@ -80,16 +80,18 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-    url = raw_input("enter")
+    url = raw_input("Please enter your url for your news article: ")
     #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
     article = Article(url)
     article.download()
     article.parse()
     article.nlp()
-    
+
     html = article.html
     text_maker = html2text.HTML2Text()
     text_maker.ignore_links = True
+    print ("Title: "+article.title.encode("utf-8"))
+    print ("Your sentiments are being generated...")
     l = list(article.title.encode("utf-8").split())
     text = text_maker.handle(html)
     l = [li for li in l if li.lower() not in stop]
@@ -120,6 +122,7 @@ if __name__ == '__main__':
     #print headlinel
     ps = ps[headlinel+2].strip()    
     f = open("headlinesentiment.txt","a")
+    print ("Sentiment predicted through previous headlines: "+ ps)
     f.write(article.title.encode("utf-8"))
     f.write("\n")
     f.write(ps)
