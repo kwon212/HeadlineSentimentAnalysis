@@ -88,6 +88,9 @@ if __name__ == '__main__':
     text = text_maker.handle(html)
 
     print(article.title)
+    f = open("headlinesentiment.txt","w")
+    f.write(article.title)
+    f.close
     keywords = article.keywords
 
 
