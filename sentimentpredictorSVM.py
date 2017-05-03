@@ -1,3 +1,5 @@
+#analyzes sentiment for a list of tweets
+
 import sys
 import re
 import tweepy
@@ -115,7 +117,7 @@ class TwitterClient(object):
             f = open("src/sentimenttweets_random.txt",'r') 
             f = list(f)
             # parsing tweets one by one
-            for tweet in f[:2000] :
+            for tweet in f[:10000] :
                 tweet = tweet.replace(','," ",1)
 
                 tweet = self.clean_tweet(tweet)
@@ -318,6 +320,7 @@ iINES TERMINATED BY '\n';
     #print p_labels
     #print p_accs
     #print p_vals
+    """
     for p in range(len(p_vals)):
         #get probability of belonging in that class
         
@@ -337,7 +340,7 @@ iINES TERMINATED BY '\n';
         else:
            print "mildly", sent
  
-
+   """
 if __name__ == "__main__":
     # calling main function
     main()
