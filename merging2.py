@@ -7,7 +7,6 @@ import operator
 import tweepy
 import json
 import re
-from collections import Counter
 from nltk.tokenize import word_tokenize
 from newspaper import Article
 from tweepy.streaming import StreamListener
@@ -15,12 +14,10 @@ from nltk.corpus import stopwords
 import string
 import sentimentmodifiedcurrent as sentiment
 
-
+count = 1 
 punctuation = list(string.punctuation)
 stop = stopwords.words('english') + punctuation + ['rt', 'via']
-stop.append("Advertisement")
-stop.append("Continue")
-stop.append("with")
+
 emoticons_str = r"""
     (?:
         [:=;] # Eyes
@@ -57,19 +54,16 @@ class MyStreamListener(StreamListener):
     def __init__(self, api = None):
         super(MyStreamListener, self).__init__()
         self.counter = 0
-        self.limit = 1000
+        self.limit = 10
         self.tweetList = []
             
     def on_status(self, status):
         if self.counter < self.limit:
-            #print(self.counter) 
+            print(self.counter) 
             self.counter = self.counter + 1
             try:
-                with open('tweets.txt', 'a') as f:
-                    #f.write(str(self.counter))
+                with open('tweetsv2.txt', 'a') as f:
                     f.write((status.text).encode("utf-8"))
-                    f.write("\n")
-                    f.write("##########")
                     f.write("\n")
                 f.close()
             except (TypeError, NameError):
@@ -80,8 +74,7 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-    url = raw_input("enter")
-    #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
+    url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
     article = Article(url)
     article.download()
     article.parse()
@@ -90,43 +83,9 @@ if __name__ == '__main__':
     html = article.html
     text_maker = html2text.HTML2Text()
     text_maker.ignore_links = True
-    l = list(article.title.encode("utf-8").split())
     text = text_maker.handle(html)
-    l = [li for li in l if li.lower() not in stop]
-    #c=Counter(l)
-    #c = c.most_common(2)
-    #print c
-    #print(article.title)
-    #k#eywords = l 
-    f = open("headlinesentiment.txt","r")
-    c = 0
-    maxjc = 2
-    healinel = -1
-    ps = f.readlines()
-    ps = [x.strip() for x in ps]
-    for line in ps:
-        if c % 3 == 0:
-           
-           
-             s1 = set(line.split())
-             #print s1
-             s2 = set(article.title.encode("utf-8").split())
-             jc = (1 - float(len(s1.intersection(s2))) / float(len(s1.union(s2))))
-             #print jc
-             if jc < maxjc:
-                maxjc = jc
-                headlinel = c  
-        c += 1
-    #print headlinel
-    ps = ps[headlinel+2].strip()    
-    f = open("headlinesentiment.txt","a")
-    f.write(article.title.encode("utf-8"))
-    f.write("\n")
-    f.write(ps)
-    f.write("\n")
-    f.close()
 
-        
+    print(article.title)
     keywords = article.keywords
 
 
@@ -137,26 +96,23 @@ if __name__ == '__main__':
     keywords_html = rake_object_html.run(text)
     keywords_summary = rake_object_summary.run(article.summary)
     
-    #print keyword
     count = 0
-    #for i in range(len(keywords_html)):
-    #    keywords.append(keywords_html[i][0])
-    #    count = count + 1
-    #    if count > 4:
-    #        break
-    
-    #for i in range(len(title_keys)):
-    #    keywords.append(title_keys[i][0])
-    
-    #for i in range(len(keywords_summary)):
-     #   keywords.append(keywords_summary[i][0])
-    keywords = l 
-    for i in range(len(keywords)):  
-      
-        #keywords[i] = keywords[i].encode("utf-8")
+    for i in range(len(keywords_html)):
+        keywords.append(keywords_html[i][0])
+        count = count + 1
+        if count > 4:
+            break
+
+    for i in range(len(title_keys)):
+        keywords.append(title_keys[i][0])
+
+    for i in range(len(keywords_summary)):
+        keywords.append(keywords_summary[i][0])
+
+    for i in range(len(keywords)):
+        keywords[i] = keywords[i].encode("utf-8")
         keywords[i] = re.sub('[^A-Za-z0-9\s]+', '', keywords[i])
-    if "reading" in keywords:
-        keywords.remove("reading")
+
     print(keywords)
     
 
@@ -172,7 +128,7 @@ if __name__ == '__main__':
     myStreamListener = MyStreamListener()
     myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
 
-    myStream.filter(languages=["en"],track=keywords)
+    myStream.filter(track=keywords)
 
     #keystostring = " ".join(keywords)
     #keystostring = '"' + re.sub('\s', '","', keystostring) + '"'
@@ -185,29 +141,10 @@ if __name__ == '__main__':
             terms_stop = [term for term in preprocess(tweet) if term not in stop]
     
     print(terms_stop)'''
-tw = []
-t = ""
 
-count = 0
-with open('tweets.txt') as f:
-    for line in f:
-        if line.strip() == "##########":
-            #print "ss"
-            for key in keywords:
-                if(key in t.split()):
-                    count = count + 1
-            if count >= 4:
-                    tw.append(t)
-                    #print t
-                    t = ""
-                    count = 0
-            t = ""
-        else:
-            t = t + line
-    #tw = f.readlines()
+    tw = []
+    with open('tweetsv2.txt') as f:
+        tw = f.readlines()
 
-tw = [x.strip() for x in tw]
-for t in tw:
-    print t
-    print "\n"
-sentiment.main(tw)
+    tw = [x.strip() for x in tw]
+    sentiment.main(tw)
