@@ -4,7 +4,7 @@ import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
 #import svm
-sys.path.append("./libsvm/python")
+sys.path.append("./libsvm-3.22/python")
 from svmutil import *
 import collections
  
