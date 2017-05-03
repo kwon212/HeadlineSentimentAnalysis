@@ -59,7 +59,7 @@ class MyStreamListener(StreamListener):
             
     def on_status(self, status):
         if self.counter < self.limit:
-            print(self.counter) 
+            #print(self.counter) 
             self.counter = self.counter + 1
             try:
                 with open('tweets.txt', 'a') as f:
@@ -77,9 +77,10 @@ class MyStreamListener(StreamListener):
         print(status)
 
 if __name__ == '__main__':
-    url = "https://www.nytimes.com/2017/05/02/world/europe/trump-putin-syria.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news"
+    #url = "https://www.nytimes.com/2017/05/02/world/europe/trump-putin-syria.html?hp&action=click&pgtype=Homepage&clickSource=story-heading&module=first-column-region&region=top-news&WT.nav=top-news"
     #url = "https://www.nytimes.com/2017/03/04/world/asia/north-korea-missile-program-sabotage.html?ref=politics"
     #url = "https://www.nytimes.com/2017/03/21/climate/trump-climate-change.html"
+    url = "https://www.nytimes.com/2017/05/02/us/politics/health-care-paul-ryan-fred-upton-congress.html"
     article = Article(url)
     article.download()
     article.parse()
@@ -124,7 +125,6 @@ if __name__ == '__main__':
         keywords[i] = keywords[i].encode("utf-8")
         keywords[i] = re.sub('[^A-Za-z0-9\s]+', '', keywords[i])
 
-    print(keywords)
     
 
     CONSUMER_KEY = "5k315aJtfEpZOftsOpOIPrvai"
@@ -159,13 +159,12 @@ count = 0
 with open('tweets.txt') as f:
     for line in f:
         if line.strip() == "##########":
-            print "ss"
+            
             for key in keywords:
                 if(key in t):
                     count = count + 1
             if count >= 4:
                     tw.append(t)
-                    print t
                     t = ""
                     count = 0
         else:
@@ -173,5 +172,4 @@ with open('tweets.txt') as f:
     #tw = f.readlines()
 
 tw = [x.strip() for x in tw]
-print tw
 sentiment.main(tw)

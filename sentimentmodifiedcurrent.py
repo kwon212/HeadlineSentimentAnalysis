@@ -4,7 +4,7 @@ import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
 #import svm
-sys.path.append("./libsvm-3.22/python")
+sys.path.append("./libsvm/python")
 from svmutil import *
 import collections
  
@@ -292,7 +292,7 @@ iINES TERMINATED BY '\n';
     #train_tweets = tweets[0:start]
     
     test_tweets = tweets
-    print test_tweets
+    #print test_tweets
     #print len(train_tweets), len(test_tweets)
     fv = []
 
@@ -323,18 +323,18 @@ iINES TERMINATED BY '\n';
     #print p_accs
     #print p_vals
     c = collections.Counter(p_labels)
-    print c
+    #print c
     pval = c.most_common(1)[0][0]
-    print pval
+    #print pval
     sum = 0
     for p in range(len(p_vals)):
         #get probability of belonging in that class
         if p_labels[p] == pval:
             sum  += p_vals[p][int(p_labels[p])]
 
-    print sum
+    #print sum
     sumavg = float(sum)/float(c.most_common(1)[0][1])
-    print sumavg
+    #print sumavg
         #print pval
     if int(pval) == int(0):
         sent = "positive"
