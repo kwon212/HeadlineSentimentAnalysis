@@ -14,6 +14,14 @@ output: sentiment
 Needed libraries:
 
 libsvm
+newspaper
+nltk
+html2text
+tweepy
+rake
+requests
+
+
 
 
 Other files:
@@ -29,3 +37,14 @@ merging: merge SVM model with keyword extractor of pre-existing tweet datasets
 merging_current.py: merge SVM model with current tweet extractor
 
 randomize.py: randomize training set
+
+test.py: k-clustering algorithm and necessary preprocessing components
+
+analyzesentiment.py: obtains keywords and tweets from dataset to be supplied to SVM
+
+
+
+GITHUB LINK:
+https://github.com/kwon212/HeadlineSentimentAnalysis
+
+
