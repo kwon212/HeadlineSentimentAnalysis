@@ -3,9 +3,9 @@ Framework for Headline Sentiment Analysis
 
 Whitney Choo, So Yon Kwon
 
-To run: 
+To anaylze sentiment of current headlines: 
 
-python analyzesentiment2.py
+python analyzesentiment_current.py
 
 input: url of headline
 output: sentiment
@@ -14,6 +14,7 @@ output: sentiment
 Needed libraries:
 
 libsvm
+
 
 Other files:
 
@@ -25,5 +26,6 @@ sentimentmodifiedcurrent.py: SVM model for analyzing sentiment of current tweets
 
 merging: merge SVM model with keyword extractor of pre-existing tweet datasets
 
-merging2.py: merge SVM model with tweet extractor
+merging_current.py: merge SVM model with current tweet extractor
+
 randomize.py: randomize training set
