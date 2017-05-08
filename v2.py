@@ -209,6 +209,7 @@ with open('tweets.txt') as f:
             t = t + line
     #tw = f.readlines()
 
+print ("still generating..")
 tw = [x.strip() for x in tw]
 #for t in tw:
 #    print t

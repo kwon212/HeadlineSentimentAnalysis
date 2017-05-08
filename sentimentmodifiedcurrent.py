@@ -291,6 +291,7 @@ class TwitterClient(object):
 
 def main(tweets):
     api = TwitterClient()
+    print ("Still generating...")
 
     """
     testing Textblob accuracy (has nothing to do with SVM)

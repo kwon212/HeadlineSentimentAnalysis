@@ -23,13 +23,13 @@ Ben Carson Calls Slaves ‘Immigrants’
 negative
 positive
 Family Want Officer Who Shot Black Teen Charged With Crime
-positive
-positive
-Family Want Officer Who Shot Black Teen Charged With Crime
-positive
+negative
 positive
 Family Want Officer Who Shot Black Teen Charged With Crime
+negative
 positive
+Family Want Officer Who Shot Black Teen Charged With Crime
+negative
 positive
 European Union Leaders, Gathering Without May, Endorse Guidelines on ‘Brexit’ Talks
 negative
@@ -45,4 +45,19 @@ positive
 positive
 G.O.P. Scrambles as a Crucial Voice Shuns the Latest Health Bill
 positive
+positive
+Trump and Putin Agree to Seek Syria Cease-Fire
+negative
+positive
+
+‘He Was Not a Thug’: Questions of Language Trail Police Killings
+positive
+positive
+‘He Was Not a Thug’: Questions of Language Trail Police Killings
+positive
+‘He Was Not a Thug’: Questions of Language Trail Police Killings
+positive
+positive
+Trump and Putin Agree to Seek Syria Cease-Fire
+negative
 positive
